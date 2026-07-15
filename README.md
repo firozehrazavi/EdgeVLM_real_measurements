@@ -1,28 +1,52 @@
 # EdgeVLM Reproducibility Code
 
-This repository contains the reproducibility notebook and result files for the revised EdgeVLM manuscript.
+This repository contains the experimental notebooks and result files used in the revised EdgeVLM manuscript.
 
 ## Contents
 
-- `EdgeVLM_final_v2_with_baselines_and_gguf.ipynb`: main experimental notebook
-- `dynamic_gating_ablation_results_FINAL_REG_REBUILT.csv`: final fixed-versus-dynamic gating ablation results
-- `browser_cpu_benchmark.html`: CPU-only browser benchmark used for the Samsung Android prototype test
+- `EdgeVLM_final.ipynb`: main training and evaluation notebook
+- `EdgeVLM_real_measurements.ipynb`: CPU benchmark and real-measurement notebook
+- `dynamic_gating_ablation_results.csv`: fixed-versus-dynamic temporal fusion results across five random seeds
+- `browser_cpu_benchmark.html`: CPU-only browser benchmark used for the Samsung Android experiment
 
-## Main Results
+## Dynamic Fusion Results
 
-The final dynamic fusion ablation uses five random seeds and 500 NExT-QA samples.
+The dynamic temporal fusion experiment was conducted using 500 NExT-QA samples across five random seeds.
 
-| Fusion Strategy | Accuracy |
+| Fusion strategy | Mean accuracy |
 |---|---:|
-| Fixed global alpha | 0.2320 |
-| Regularized dynamic alpha(x) | 0.2720 |
+| Fixed global α | 0.2320 |
+| Dynamic α(x) | 0.2720 |
 
-The paired t-test gives p = 0.1132, so the improvement is reported as an improvement trend rather than a statistically significant gain.
+The dynamic fusion model achieved a relative improvement of 17.24%.
+
+The paired t-test produced `p = 0.1132`. Therefore, the result is reported as an improvement trend rather than a statistically significant gain.
+
+## CPU Benchmark
+
+Two component-level CPU benchmarks were conducted.
+
+| Environment | Mean latency | P95 latency | Throughput |
+|---|---:|---:|---:|
+| Colab CPU | 3.24 ms | 4.69 ms | 309.05 samples/s |
+| Samsung Android browser | 381.57 ± 8.36 ms | 398.74 ms | 2.62 samples/s |
+
+The Samsung benchmark was repeated across three independent runs. Each run included 10 warm-up iterations and 100 timed iterations.
+
+The browser implementation used JavaScript CPU execution without WebGL, WebGPU, or WebAssembly acceleration.
 
 ## Important Note
 
-The browser-based Samsung Android benchmark is a CPU-side prototype workload. It uses JavaScript CPU execution only and does not use WebGL, WebGPU, or WASM acceleration. This benchmark should not be interpreted as full native smartphone deployment of the complete EdgeVLM pipeline.
+The Samsung Android experiment evaluates only the temporal-fusion component.
+
+It should not be interpreted as native end-to-end deployment of the complete EdgeVLM pipeline.
+
+Battery consumption, sustained memory usage, thermal behavior, and full native smartphone deployment were not evaluated.
 
 ## Reproducibility
 
-Large model weights and datasets are not included in this repository. Some notebook cells are optional and may require downloading public models or datasets.
+Large model weights and datasets are not included in this repository.
+
+Some notebook cells may require downloading public models or datasets before execution.
+
+Random seeds and experiment settings are included in the notebooks and result files.
